@@ -1,3 +1,7 @@
+
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
   const tableButton = document.getElementById('export-xlsx-btn')
   if (tableButton) {
@@ -7,6 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
     })
   }
 });
+
+
 
 
 function setColumnWidths(ws) {
@@ -78,3 +84,28 @@ function tableToExcel() {
     XLSX.writeFile(wb, "Тестметрстандарт_лічильники_води.xlsx");
 }
 
+
+
+
+document.querySelectorAll('.task-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const taskValue = this.getAttribute('data-task');
+  
+      fetch('/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ task: taskValue })
+      })
+      .then(response => response.json()) // Приймаємо JSON відповідь
+      .then(data => {
+        console.log('Success:', data);
+        // Обробка отриманих даних, що містяться в "data"
+        alert(`Завдання номер: ${data.info[1]}`);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  });

@@ -1,3 +1,7 @@
+{{!-- Add missing import statement for Handlebars library --}}
+{{!-- Import Handlebars library --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+
 <html lang="en">
 
 <head>
@@ -27,20 +31,53 @@
     {{>nav}}
     <data>
       <div>
-        <h1>Перевірити лічильник</h1>
+        <h1>Перевірити сайт</h1>
+        
 
         <div class="card-panel {{#if info.[0]}}green lighten-4{{else}}red lighten-4{{/if}}">
           <h6>{{info.[1]}}</h6>
         </div>
 
-        <form action="/list" method="POST" onsubmit="return">
-          <label>Номер лічильника</label>
-          <input name="counter_number" value="" class="field" />
+<div>
+  <button class="task-btn" data-task="1">Завдання 1</button>
+  <button class="task-btn" data-task="2">Завдання 2</button>
+  <button class="task-btn" data-task="3">Завдання 3</button>
+</div>
+
+<script>
+  document.querySelectorAll('.task-btn').forEach(button => {
+  button.addEventListener('click', function() {
+    const taskValue = this.getAttribute('data-task');
+
+    fetch('/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ task: taskValue })
+    })
+    .then(response => response.json()) // Приймаємо JSON відповідь
+    .then(data => {
+      console.log('Success:', data);
+      // Обробка отриманих даних, що містяться в "data"
+      alert(`Завдання номер: ${data.info[1]}`);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });
+});
+
+</script>
+ <form action="/list" method="POST" onsubmit="return">
+
+          <label>Адреса сайту</label>
+          <input name="site_link" value="" class="field" />
           <input type="submit" value="Перевірити" class="btn" />
           {{#if isAuthenticated}}
 
           <input name="show_table" type="submit" value="Таблиця" class="btn"
-            onclick="document.querySelector('input[name=counter_number]').value='***'">
+            onclick="document.querySelector('input[name=site_link]').value='***'">
           {{!-- {{#if isAdmin}} --}}
           {{!-- <input name="show_table" type="submit" value="Таблиця" class="btn"
             onclick="document.querySelector('input[name=counter_number]').value='**'">

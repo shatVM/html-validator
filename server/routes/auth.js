@@ -29,24 +29,8 @@ const users = [
 ]
 
 // Обробка логіна
-// router.post('/', (req, res) => {
-//   const { username, password } = req.body;
-//   console.log('username ',username,'password ',password,)
-//   const user = users.find(u => u.username === username && u.password === password);
-
-//   if (user) {
-//     req.session.isAuthenticated = true;
-//     req.session.username = user.username;
-//     res.redirect('/');
-//     console.log('Увійшов ', user.username)
-//   } else {
-//     res.send('Invalid username or password. <a href="/">Try again</a>.');
-//   }
-// });
-// Обробка логіна
 router.post("/", (req, res) => {
   const { username, password } = req.body;
-  //console.log("username ", username, "password ", password);
 
   // Знайти користувача
   const user = users.find(

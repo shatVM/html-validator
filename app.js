@@ -7,7 +7,7 @@ const session = require('express-session');
 const crypto = require('crypto');
 
 const app = express();
-const PORT = 80;
+const PORT = 8080;
 
 // Налаштування пула підключення до БД
 const pool = require("./server/scripts/pool");
@@ -30,6 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Підключення роутів
 const indexRouter = require("./server/routes/index")
+const tasksRouter = require("./server/routes/tasks")
 const listRouter = require("./server/routes/list")
 const addRouter = require("./server/routes/add")
 const viewRouter = require("./server/routes/view")
@@ -47,9 +48,6 @@ require("./server/scripts/logger/logger");
 
 //Використання .env файлу для зберігання ключа
 require('dotenv').config();
-
-// Генеруємо випадковий секретний ключ для сесій (тільки для прикладу, не робіть це на кожному запуску)
-//const sessionSecret = crypto.randomBytes(32).toString('hex');
 
 //--------------------------------------------------------
 
@@ -78,10 +76,9 @@ app.use(sessionMiddleware)
 // Встановлення маршрутів
 app.use("/", indexRouter)
 app.use("/list", listRouter)
-// Використання middleware для перевірки авторизованого користувача перед маршрутом 
-app.use("/view", isAuthenticatedMiddleware, viewRouter)
-// Використання middleware для перевірки адміністратора перед маршрутом 
-app.use("/add", isAdminMiddleware, addRouter)
+app.use("/tasks", tasksRouter)
+app.use("/view", isAuthenticatedMiddleware, viewRouter) // Використання middleware для перевірки авторизованого користувача перед маршрутом 
+app.use("/add", isAdminMiddleware, addRouter) // Використання middleware для перевірки адміністратора перед маршрутом 
 app.use("/delete", isAdminMiddleware, deleteRouter)
 app.use("/edit", isAdminMiddleware, editRouter)
 app.use("/auth", authRouter)
