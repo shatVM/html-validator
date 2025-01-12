@@ -1,0 +1,126 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Додати лічильник</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script src="scripts/script.js"></script>
+  <link rel="stylesheet" href="styles/styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    {{>nav}}
+    <data>
+      <div>
+        <h1>Додати дані повірки лічильника</h1>
+
+        <div class="card-panel {{#if info.[0]}}green lighten-4{{else}}red lighten-4{{/if}}">
+          <h6>{{info.[1]}}</h6>
+        </div>
+
+        <form action="/add" method="post" enctype="multipart/form-data" class="col s12">
+
+          {{!-- ТАБЛИЦЯ EXCEL --}}
+          <div class="col s12 m2 z-depth-3 ">
+            <h4 class="">Дані з таблиці Excel</h4>
+            <div class="input-field col s12">
+              <label for="xls_data">Вставити скопійовані дані зі стовпчиків A...W</label>
+              {{!-- <input type="text" id="xls_data" name="xls_data" class="s4" value="" /> --}}
+              {{!-- <input type="text" id="xls_data" name="xls_data" class="s4" value="" oninput="displayPairs()" />
+              --}}
+              <input type="text" id="xls_data" name="xls_data" class="s4" value="" oninput="displayTable()" />
+            </div>
+
+            <table class="striped highlight rotated-table">
+              <tbody id="data-table">
+                <!-- Тут буде доданий контент з таблиці Excel у табличному вигляді-->
+              </tbody>
+            </table>
+          </div>
+
+          {{!-- PDF файл --}}
+          <div class="col s12 m2 z-depth-3 ">
+            <h4 class="">PDF файл з апарату повірки</h4>
+            <div class="file-field input-field">
+              {{!-- Кнопка для вибору PDF --}}
+              <div class="btn s6">
+                <span>Вибрати файл PDF</span>
+                <input class="s6" type="file" name="pdf" accept="application/pdf" required />
+              </div>
+              <div class="file-path-wrapper s2">
+                <input class="file-path validate" type="text" />
+              </div>
+            </div>
+            <canvas id="pdf-preview"></canvas>
+          </div>
+
+          {{!-- ДОКУМЕНТ --}}
+          <div class="col s12 m2 z-depth-3">
+            <h4 class="">Документ про повірку</h4>
+            <div class="row">
+              <div class="input-field col s12">
+                <label for="document_number">Номер документу про повірку</label>
+                <input type="text" id="document_number" name="document_number" class="s4" value="" />
+              </div>
+              <div class="input-field col s12"><label for="document_date">Дата документу про повірку</label>
+                <input type="text" id="document_date" name="document_date" class="s4 datepicker" value="" />
+              </div>
+              <div class="input-field col s12"><label for="document_validity_date">Дата чинності документу про
+                  повірку</label>
+                <input type="text" id="document_validity_date" name="document_validity_date" class="s4 datepicker"
+                  value="" />
+              </div>
+              <p>
+
+              </p>
+            </div>
+            <div class="file-field input-field">
+              <div class="btn s6">
+                <span>Прикріпити документ</span>
+                <input class="s6" type="file" name="document" accept="application/pdf" required />
+              </div>
+              <div class="file-path-wrapper s2">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+            <canvas id="document-preview"></canvas>
+          </div>
+          {{!--СТАН ОПЛАТИ--}}
+          <div class="col s12 m2 z-depth-3">
+            <h4 class="">Стан оплати</h4>
+            <label>
+              <input type="checkbox" class="filled-in" name="paid" />
+              <span>Оплачено</span>
+            </label>
+          </div>
+
+          {{!-- ЗАВАНТАЖИТИ --}}
+          <div class="col s12 m2 z-depth-3 ">
+            <div class="input-field ">
+              <div class="s12">
+                <button type="submit" class="waves-effect waves-light btn blue darken-2">Завантажити на сервер</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+
+
+      </div>
+
+    </data>
+    {{>footer}}
+  </div>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.7.570/pdf.min.js"></script>
+
+</html>

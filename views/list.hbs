@@ -1,0 +1,327 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Перевірити лічильник</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script src="scripts/script.js"></script>
+
+  {{!-- XLS --}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="scripts/tableToXLS.js"></script>
+
+
+  <link rel="stylesheet" href="styles/styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    {{>nav}}
+    <data>
+      <div>
+        <h1>Перевірити лічильник</h1>
+
+        <div class="card-panel {{#if info.[0]}}green lighten-4{{else}}red lighten-4{{/if}}">
+          <h6>{{info.[1]}}</h6>
+        </div>
+
+        <form action="/list" method="POST" onsubmit="return">
+          <label>Номер лічильника</label>
+          <input name="counter_number" value="" class="field" />
+          <input type="submit" value="Перевірити" class="btn" />
+          {{#if isAuthenticated}}
+
+          <input name="show_table" type="submit" value="Таблиця" class="btn"
+            onclick="document.querySelector('input[name=counter_number]').value='***'">
+          {{!-- {{#if isAdmin}} --}}
+          {{!-- <input name="show_table" type="submit" value="Таблиця" class="btn"
+            onclick="document.querySelector('input[name=counter_number]').value='**'">
+          {{/if}} --}}
+        </form>
+
+      </div>
+      {{#if results_table_watercanal}}
+      <div>
+        <button id="export-xlsx-btn" class="btn green lighten-2">Зберегти у форматі XLSX</button>        
+        {{!-- <button id="export-docx-btn" class="btn blue lighten-2">Зберегти у форматі DOCX</button> --}}
+        {{!-- <button id="export-pdf-btn" class="btn red lighten-2">Зберегти у форматі PDF</button> --}}
+      </div>
+      {{/if}}
+      {{/if}}
+
+      {{!-- Таблиця --}}
+      {{#if results_table_watercanal}}
+      <div class="results_table">
+        <div class="table-container">
+          <table class="striped highlight rotated-table centered">
+            <thead>
+              <tr>
+                <th style="width: 60px; ">
+                  {{!-- <input type="text" id="filter_col_0" placeholder="Фільтр" /> --}} {{!-- № --}}
+                </th>
+                <th style="width: 200px; " ><input type="text" id="filter_col_1" placeholder="Фільтр" /></th>  {{!-- Адреса --}}
+                <th style="width: 90px; "><input type="text" id="filter_col_2" placeholder="Фільтр" /></th> {{!-- Лічильник --}}
+                <th style="width: 70px;"><input type="text" id="filter_col_3" placeholder="Фільтр" /></th> {{!-- Тип повірки --}}
+                <th><input type="text" id="filter_col_4" placeholder="Фільтр" /></th> {{!-- Нак. об'єм --}}
+                <th style="width: 85px; "><input type="text" id="filter_col_5" placeholder="Фільтр" /></th> {{!-- Номер документу --}}
+                <th style="width: 75px; "><input type="text" id="filter_col_6" placeholder="Фільтр" /></th> {{!-- Дата документу --}}
+                <th style="width: 100px;"><input type="text" id="filter_col_7" placeholder="Фільтр" /></th> {{!-- Статус --}}
+                <th><input type="text" id="filter_col_8" placeholder="Фільтр" /></th> {{!-- Номер пломби --}}
+                <th><input type="text" id="filter_col_8-1" placeholder="Фільтр" /></th> {{!-- Клас точності	 --}}
+                <th><input type="text" id="filter_col_8-2" placeholder="Фільтр" /></th> {{!-- Тип лічильника	 --}}
+                <th><input type="text" id="filter_col_8-3" placeholder="Фільтр" /></th> {{!-- Місце встановлення	 --}}
+                <th style="width: 80px;"><input type="text" id="filter_col_9" placeholder="Фільтр" /></th> {{!-- Оплата --}}
+                {{#if isAdmin}}<th><input type="text" id="filter_col_10" placeholder="Фільтр" /></th> {{!-- Керування --}} {{/if}}
+
+              </tr>
+              <tr>
+                <th></th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(1, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(1, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(2, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(2, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(3, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(3, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(4, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(4, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(5, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(5, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(6, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(6, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(7, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(7, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(8, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(8, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(8-1, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(8-1, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(8-2, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(8-2, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(8-3, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(8-3, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(9, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(9, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                {{#if isAdmin}}
+                <th>
+                  <i class="material-icons z-depth-1" onclick="sortTable(10, 'asc')"
+                    title="За зростанням">arrow_drop_up</i>
+                  <i class="material-icons z-depth-1" onclick="sortTable(10, 'desc')"
+                    title="За спаданням">arrow_drop_down</i>
+                </th>
+                {{/if}}
+              </tr>
+              <tr>
+                <th>№</th>
+                <th>Адреса</th>
+                <th>Лічильник</th>
+                <th>Тип повірки</th>
+                <th>Нак. об'єм</th>
+                <th>Номер документу</th>
+                <th>Дата документу</th>
+                <th>Статус</th>
+                <th>Номер пломби</th>
+                <th>Клас точності</th>
+                <th>Тип лічильника</th>
+                <th>Місце встановлення</th>
+                <th>Оплата</th>
+                {{#if isAdmin}}
+                <th>
+                  Керування
+                </th>
+                {{/if}}
+              </tr>
+            </thead>
+            <tbody>
+              {{#each results_table_watercanal }}
+              <tr>
+                <td>{{add @index 1}}</td>
+                <td style="text-align: left;">{{this.address}}</td>
+                <td>{{this.counter_number}}</td>
+                <td>Х. В.</td>
+                <td>{{this.counter_value}}</td>
+                <td>{{this.document_number}}</td>
+                <td>{{this.date}}</td>
+                <td>{{this.counter_result}}</td>
+                <td>{{this.seal_number}}</td>
+                <td>{{this.accuracy_class}}</td>
+                <td>{{this.counter_type}}</td>
+                <td>{{this.installation_place}}</td>
+                <td>
+                  <label>
+                    <input type="checkbox" {{this.isPaid}} class="filled-in" disabled="disabled">
+                    <span></span>
+                  </label>
+                </td>
+                {{#if ../isAdmin}}
+                <td>
+                  <a href="/view/{{this.id}}" class="waves-effect waves-light  light-blue lighten-3 btn-small admin-icons" target="_blank"><i
+                      class="material-icons">remove_red_eye</i></a>
+                  <a href="/edit/{{this.id}}" class="waves-effect waves-light btn-small admin-icons" target="_blank"><i
+                      class="material-icons">brush</i></a>    
+                </td>
+                {{/if}}
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {{/if}}
+
+      {{!-- Інформація про один лічильник --}}
+      {{#if results}}
+      {{#each results}}
+      <h3>Інформація про лічильник {{this.counter_number}}</h3>
+      <h4>Станом на {{this.date}}</h4>
+
+      <table class="striped highlight rotated-table">
+        <tr>
+          <th>Номер лічильника</th>
+          <td>{{this.counter_number}}</td>
+        </tr>
+        <tr>
+          <th>Тип лічильника</th>
+          <td>{{this.counter_type}}</td>
+        </tr>
+        <tr>
+          <th>Рік виробництва</th>
+          <td>{{this.counter_year}}</td>
+        </tr>
+        <tr>
+          <th>Покази на момент повірки</th>
+          <td>{{this.counter_value}}</td>
+        </tr>
+        <tr>
+          <th>Статус лічильника</th>
+          <td>{{this.counter_result}}</td>
+        </tr>
+        <tr>
+          <th>Номер документу про повірку</th>
+          <td>{{this.document_number}}</td>
+        </tr>
+        <tr>
+          <th>Дата документу про повірку</th>
+          <td>{{this.document_date}}</td>
+        </tr>
+        <tr>
+          <th>Дата чинності документу про повірку</th>
+          <td>{{document_validity_date}}</td>
+        </tr>
+        <tr>
+          <th>Номер протоколу повірки</th>
+          <td>{{this.protocol_number}}</td>
+        </tr>
+        <tr>
+          <th>Дата протоколу повірки</th>
+          <td>{{this.date}}</td>
+        </tr>
+        <tr>
+          <th>Дата внесення</th>
+          <td>{{this.dateAdd}}</td>
+        </tr>
+        <tr>
+          <th>Оплата</th>
+          <td>
+            <label>
+              <input type="checkbox" {{this.isPaid}} class="filled-in" disabled="disabled">
+              <span></span>
+            </label>
+          </td>
+        </tr>
+        {{#if ../isAdmin}}
+        <tr>
+          <th>Керування</th>
+          <td>
+            <a href="/view/{{this.id}}" class="waves-effect waves-light btn-small">Переглянути</a>
+          </td>
+        </tr>
+        {{/if}}
+      </table>
+
+      <ul class="collapsible">
+        <li>
+          <div class="collapsible-header"><i class="material-icons">filter_drama</i>Документ про повірку</div>
+          <div class="collapsible-body">
+            <object data="../uploads/{{this.date}}-{{this.counter_number}}/{{this.document_file_name}}"
+              type="application/pdf">
+              <iframe src="../uploads/{{this.date}}-{{this.counter_number}}/{{this.document_file_name}}">
+                <p>This browser does not support PDF!</p>
+              </iframe>
+            </object>
+          </div>
+        </li>
+        <li>
+          <div class="collapsible-header"><i class="material-icons">place</i>Електронний протокол</div>
+          <div class="collapsible-body">
+            <object data="../uploads/{{this.date}}-{{this.counter_number}}/{{this.protocol_file_name}}"
+              type="application/pdf">
+              <iframe src="../uploads/{{this.date}}-{{this.counter_number}}/{{this.protocol_file_name}}">
+                <p>This browser does not support PDF!</p>
+              </iframe>
+            </object>
+          </div>
+        </li>
+      </ul>
+      {{/each}}
+      {{/if}}
+    </data>
+    {{>footer}}
+  </div>
+</body>
+
+</html>

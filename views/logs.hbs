@@ -1,0 +1,48 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Логування</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script src="scripts/script.js"></script>
+  <link rel="stylesheet" href="styles/styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    {{>nav}}
+    <data>
+      <div>
+        <h1>Список файлів з логами</h1>
+      </div>
+
+
+      <div class="card-panel {{#if info.[0]}}green lighten-4{{else}}red lighten-4{{/if}}">
+        <h6>{{info.[1]}}</h6>
+      </div>
+
+      
+        <div id="fileList" class="collection">
+          {{#each results}}
+          <a href="#" class="file-link collection-item" data-content="{{this.content}}">{{this.filename}}</a>
+          {{/each}}
+        </div>
+      
+
+      <div class="col s12 m2 z-depth-3 logs_content">
+        <h4>Вміст файлу</h4>
+        <p id="fileContent"></p>
+      </div>
+    </data>
+    {{>footer}}
+  </div>
+</body>
+
+</html>

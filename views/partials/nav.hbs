@@ -1,0 +1,85 @@
+<nav class="blue darken-2">
+  <div class="nav-wrapper">
+    <a href="https://testmetrstandart.com.ua/" class="brand-logo" target="_blank">ТМС</a>
+    <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <ul class="right hide-on-med-and-down">
+      <li><a href="/">Головна</a></li>
+      <li><a href="/list">Перевірити лічильник</a></li>
+      {{#if isAuthenticated}}
+      {{#if isAdmin}}
+      <li><a href="/add">Додати лічильник</a></li>
+      <li><a href="http://localhost:8080/phpmyadmin/index.php?route=/sql&pos=0&db=water_result&table=test_results" target="_blank">БД</a></li>
+      <li><a href="/logs">Сервер</a></li>
+
+      {{/if}}
+      <li><a class="btn disabled">{{username}}</a></li>
+      <li><a class="waves-effect waves-light btn modal-trigger" href="/logout">Вийти</a></li>
+      {{else}}
+      <!-- Modal Trigger -->
+      <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Увійти</a></li>
+      {{/if}}
+    </ul>
+  </div>
+</nav>
+
+<ul class="sidenav" id="mobile-demo">
+  <li>
+    <div class="user-view">
+      <div class="background">
+        <img src="images/water_counter.jpeg">
+      </div>
+      <a href="#user"><img class="circle" src="images/cropped-logo2.png"></a>
+      <a href="https://testmetrstandart.com.ua/" target="_blank"><span class="white-text name">ТОВ
+          "ТЕСТМЕТРСТАНДАРТ"</span></a>
+      <a href="tel:+380674647886"><span class="white-text email">(067) 464-78-86</span></a>
+      <a href="mailto:testmetrstandart@ukr.net"><span class="white-text email">testmetrstandart@ukr.net</span></a>
+    </div>
+  </li>
+
+
+  <li><a href="/">Головна</a></li>
+  <li><a href="/list">Перевірити лічильник</a></li>
+  {{#if isAuthenticated}}
+  {{#if isAdmin}}
+  <li><a href="/add">Додати лічильник</a></li>
+  <li>
+    <div class="divider"></div>
+  </li>
+  <li><a href="http://localhost:8080/phpmyadmin/index.php?route=/sql&pos=0&db=water_result&table=test_results" target="_blank">БД</a></li>
+  <li><a href="/logs">Сервер</a></li>
+  {{/if}}
+  <li>
+    <div class="divider"></div>
+  </li>
+  <li><a class="btn disabled">{{username}}</a></li>
+  <li><a class="waves-effect waves-light btn modal-trigger" href="/logout">Вийти</a></li>
+  {{else}}
+  <!-- Modal Trigger -->
+  <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Увійти</a></li>
+  {{/if}}
+
+</ul>
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <div class="row">
+      <form action="/auth" method="POST" onsubmit="return" class="col s12">
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="" name="username" type="text" class="validate" />
+            <label for="username">Логін</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input placeholder="" name="password" type="password" class="validate" />
+            <label for="password">Пароль</label>
+          </div>
+        </div>
+        <input type="submit" value="Увійти" class="s12 btn" />
+      </form>
+    </div>
+  </div>
+
+</div>

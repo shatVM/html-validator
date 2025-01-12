@@ -1,0 +1,9 @@
+public/uploads
+server/scripts/logger/logs
+
+server/scripts/logger/logs/log.txt
+server/scripts/logger/logs/log.txt
+*.txt
+/server/scripts/logger/logs
+server/scripts/logger/logs/log.txt
+server/scripts/logger/logs/log.txt

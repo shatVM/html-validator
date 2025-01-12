@@ -1,0 +1,60 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Редагувати лічильник</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../styles/styles.css" />
+
+    <script src="../scripts/script.js"></script>
+    <script src="../scripts/addUA.js"></script>
+
+
+</head>
+
+<body>
+    <div class="container">
+        {{>nav}}
+        <data>
+            {{#with result}}
+            <h1>Редагувати лічильник {{this.id}}</h1>
+
+            <div class="card-panel {{#if ../info.[0]}}green lighten-4{{else}}red lighten-4{{/if}}">
+                <h6>{{../info.[1]}}</h6>
+            </div>
+
+            <form action="/edit" method="POST"
+                onsubmit="return confirm('Ви впевнені, що хочете змінити цей елемент?');">
+
+                {{#each this}}
+                {{#eq @key 'isPaid'}}
+                <label>
+                    <input type="checkbox" {{this}} class="filled-in" name="{{@key}}">
+                    <span>Оплачено</span><br>
+                </label>
+                {{else}}
+                <label>{{@key}}</label><br>
+                <input name="{{@key}}" value="{{this}}" class="field" /><br>
+                {{/eq}}
+
+                {{/each}}
+                {{/with}}
+                <button type="submit" value="" class="waves-effect waves-light btn fixed-button" />Зберегти</button>
+                <button type="submit" class="waves-effect waves-light btn" />Зберегти</button><br><br><br>
+
+            </form>
+        </data>
+        {{>footer}}
+    </div>
+
+</body>
+
+</html>

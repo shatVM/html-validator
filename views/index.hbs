@@ -1,0 +1,47 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Головна</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script src="scripts/script.js"></script>
+  <link rel="stylesheet" href="styles/styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    {{>nav}}
+    <data>
+      <div>
+        <h1>Повірка лічильників</h1>
+      </div>
+
+      <div class="card-panel {{#if info.[0]}}green lighten-4{{else}}red lighten-4{{/if}}">
+        <h6>{{info.[1]}}</h6>
+      </div>
+
+      <div>
+        <img src="images/water_counter.jpeg" alt="" class="index_image">
+      </div>
+
+      <div class="col s12 m2 z-depth-3 index_law">
+        <h4>Нормативна база</h4>
+        <p><b>НАКАЗ № 2129 від 23.12 .2016 </b>Про затвердження Методики повірки лічильників води з механічним
+          відліковим пристроєм номінальних діаметрів DN10, DN15, DN20 на місці експлуатації та внесення зміни до
+          Порядку проведення повірки законодавчо регульованих засобів вимірювальної техніки, що перебувають в
+          експлуатації, та оформлення її результатів</p> <a href="https://zakon.rada.gov.ua/laws/show/z0084-17#Text"
+          target="_blank">Відкрити</a>
+      </div>
+    </data>
+    {{>footer}}
+  </div>
+</body>
+
+</html>

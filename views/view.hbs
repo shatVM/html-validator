@@ -1,0 +1,101 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Переглянути лічильник</title>
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link rel="stylesheet" href="../styles/styles.css" />
+
+  <script src="../scripts/script.js"></script>
+  <script src="../scripts/addUA.js"></script>
+</head>
+
+<body>
+  <div class="container">
+
+    {{>nav}}
+    <data>
+
+      {{#with result}}
+
+      <h1>Інформація про лічильник {{this.counter_number}}</h1>
+      <div class="card-panel {{#if info.[0]}}green lighten-4{{else}}red lighten-4{{/if}}">
+        <h6>{{info.[1]}}</h6>
+      </div>
+
+      {{#if ../isAdmin}}
+      <div>
+        <br>
+        <a href="/edit/{{this.id}}" class="waves-effect waves-light btn-small">Редагувати</a>
+        <form action="../delete/{{this.id}}" method="POST" style="display:inline;"
+          onsubmit="return confirm('Ви впевнені, що хочете видалити цей елемент?');">
+          <input type="submit" value="Видалити" / class="btn-small red lighten-1">
+        </form>
+
+      </div>
+      {{/if}}
+
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Значення</th>
+            <th>Field DB</th>
+          </tr>
+        </thead>
+        {{#each this}}
+        <tr>
+          
+          <td>
+            {{#eq @key 'test_info'}}
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Дані з PDF</span>
+                <pre class="json-output">{{this}}</pre>
+              </div>
+            </div>
+            {{else}}
+            {{#eq @key 'isPaid'}}
+            <label>
+              <input type="checkbox" {{this}} class="filled-in" disabled="disabled">
+              <span></span>
+            </label>
+            {{else}}
+            {{this}}
+            {{/eq}}
+            {{/eq}}
+          </td>
+          <td>{{@key}}</td>
+        </tr>
+        {{/each}}
+      </table>
+
+      <object data="../uploads/{{this.date}}-{{this.counter_number}}/{{this.document_file_name}}"
+        type="application/pdf">
+        <iframe src="../uploads/{{this.date}}-{{this.counter_number}}/{{this.document_file_name}}">
+
+          <p>This browser does not support PDF!</p>
+        </iframe>
+      </object>
+
+      <object data="../uploads/{{this.date}}-{{this.counter_number}}/{{this.protocol_file_name}}"
+        type="application/pdf">
+        <iframe src="../uploads/{{this.date}}-{{this.counter_number}}/{{this.protocol_file_name}}">
+          <p>This browser does not support PDF!</p>
+        </iframe>
+      </object>
+
+      {{/with}}
+
+    </data>
+    {{>footer}}
+  </div>
+</body>
+
+</html>
