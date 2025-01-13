@@ -1,68 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Checker with Template Extraction</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        input, select {
-            padding: 10px;
-            margin-right: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: calc(50% - 20px);
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            background-color: #007BFF;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        .success {
-            color: green;
-        }
-        .failure {
-            color: red;
-        }
-        .site-title {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        .site-link {
-            margin-bottom: 10px;
-            display: inline-block;
-            color: #007BFF;
-            text-decoration: none;
-        }
-        .site-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
     <h1>Task Checker</h1>
+
+    <div class="templateSites"></div>   
+
+    <label for="templateSites">Choose a template site:</label>
+
 
     <!-- Input for Template Site URL -->
     <label for="urlInput">Enter Template Site URL:</label>
@@ -82,161 +34,7 @@
     <div id="taskList"></div>
     <div id="resultsContainer"></div>
 
-    <script>
-        let templateData = [];
-
-        // Function to extract elements from template site
-        function extractTemplate() {
-            const url = document.getElementById("urlInput").value.trim();
-            if (url) {
-                fetch(url)
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, "text/html");
-
-                        // Extracting elements from the template site
-                        templateData = Array.from(doc.body.getElementsByTagName('*')).map(element => {
-                            const task = {
-                                task: element.tagName.toLowerCase(),
-                                count: 1, // Default count
-                                values: {}
-                            };
-
-                            // Collecting all attributes as additional parameters
-                            Array.from(element.attributes).forEach(attr => {
-                                task.values[attr.name] = attr.value;
-                            });
-
-                            return task;
-                        });
-
-                        // Display the extracted template data in a table
-                        displayTemplate();
-                    })
-                    .catch(err => alert("Error fetching template site: " + err.message));
-            } else {
-                alert("Please enter a valid URL for the template.");
-            }
-        }
-
-        // Function to display extracted template data
-        function displayTemplate() {
-            const taskList = document.getElementById("taskList");
-            taskList.innerHTML = ""; // Clear previous tasks
-
-            if (templateData.length) {
-                const taskTable = document.createElement("table");
-                taskTable.innerHTML = `
-                    <thead>
-                        <tr>
-                            <th>Task</th>
-                            <th>Expected Count</th>
-                            <th>Additional Parameters</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${templateData
-                            .map(
-                                task => `
-                            <!-- Main Task Row -->
-                            <tr>
-                                <td rowspan="${Object.keys(task.values).length + 1}">${task.task}</td>
-                                <td>${task.count}</td>
-                                <td>${task.values ? Object.entries(task.values).map(([k, v]) => `${k}: ${v}`).join("<br>") : "None"}</td>
-                            </tr>
-                            <!-- Additional Parameters Rows -->
-                            ${Object.entries(task.values)
-                                .map(([k, v]) => `
-                                    <tr>
-                                        <td>${k}</td>
-                                        <td>${v}</td>
-                                        <td>To be checked...</td>
-                                    </tr>
-                                `)
-                                .join("")}
-                        `
-                            )
-                            .join("")}
-                    </tbody>
-                `;
-                taskList.appendChild(taskTable);
-            }
-        }
-
-        // Function to test entered sites based on the template data
-        function testSites() {
-            const testUrls = document.getElementById("testUrlsInput").value.trim().split(/\s+/);
-            if (testUrls.length === 0) {
-                alert("Please enter valid URLs.");
-                return;
-            }
-
-            const resultsContainer = document.getElementById("resultsContainer");
-            resultsContainer.innerHTML = ""; // Clear previous results
-
-            testUrls.forEach(url => {
-                fetch(url)
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, "text/html");
-
-                        const siteTitle = doc.querySelector('title') ? doc.querySelector('title').innerText : "No title found";
-                        
-                        const resultDiv = document.createElement("div");
-                        resultDiv.innerHTML = `
-                            <div class="site-title"><a class="site-link" href="${url}" target="_blank">${url}</a> - ${siteTitle}</div>
-                        `;
-
-                        const table = document.createElement("table");
-                        table.innerHTML = `
-                            <thead>
-                                <tr>
-                                    <th>Task</th>
-                                    <th>Count in Site</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                        `;
-
-                        // Compare elements from the template with the elements of the current site
-                        templateData.forEach(task => {
-                            const siteElements = Array.from(doc.getElementsByTagName(task.task));
-                            const siteCount = siteElements.length;
-                            const status = siteCount >= task.count ? "Yes" : "No";
-
-                            const row = document.createElement("tr");
-                            row.innerHTML = `
-                                <td>${task.task}</td>
-                                <td>${siteCount}</td>
-                                <td class="${status === 'Yes' ? 'success' : 'failure'}">${status}</td>
-                            `;
-                            table.querySelector("tbody").appendChild(row);
-
-                            // Checking additional parameters
-                            Object.entries(task.values).forEach(([paramKey, paramValue]) => {
-                                const valueMatch = Array.from(doc.querySelectorAll(`[${paramKey}="${paramValue}"]`));
-                                const matchStatus = valueMatch.length ? "Yes" : "No";
-
-                                const paramRow = document.createElement("tr");
-                                paramRow.innerHTML = `
-                                    <td>${paramKey}</td>
-                                    <td>${paramValue}</td>
-                                    <td class="${matchStatus === 'Yes' ? 'success' : 'failure'}">${matchStatus}</td>
-                                `;
-                                table.querySelector("tbody").appendChild(paramRow);
-                            });
-                        });
-
-                        table.innerHTML += `</tbody>`;
-                        resultDiv.appendChild(table);
-                        resultsContainer.appendChild(resultDiv);
-                    })
-                    .catch(err => alert("Error fetching test site: " + err.message));
-            });
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
+
 </html>

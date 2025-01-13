@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+input, select {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: calc(50% - 20px);
+}
+button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #0056b3;
+}
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+th {
+    background-color: #f4f4f4;
+}
+.success {
+    color: green;
+}
+.failure {
+    color: red;
+}
+.site-title {
+    margin-top: 20px;
+    font-weight: bold;
+}
+.site-link {
+    margin-bottom: 10px;
+    display: inline-block;
+    color: #007BFF;
+    text-decoration: none;
+}
+.site-link:hover {
+    text-decoration: underline;
+}
