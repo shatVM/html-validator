@@ -14,6 +14,67 @@ selectElement.innerHTML = `
 `;
 templateSitesDiv.appendChild(selectElement);
 
+// Кнопка для завантаження знімка або PDF
+const downloadButton = document.createElement("button");
+downloadButton.textContent = "Download Screenshot or PDF";
+document.body.appendChild(downloadButton);
+
+// Додаємо подію для завантаження PDF або скріншоту
+downloadButton.addEventListener("click", function () {
+    const selectedTemplateUrl = selectElement.value ; // Отримуємо URL вибраного сайту
+    console.log(selectedTemplateUrl);
+    if (selectedTemplateUrl) {
+        captureAndDownloadTemplate(selectedTemplateUrl);
+    }
+});
+
+// Функція для створення знімка або PDF і його завантаження
+function captureAndDownloadTemplate(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            
+            // Використання html2canvas для зняття скріншоту
+            html2canvas(doc.body).then(canvas => {
+                // Завантажити знімок як зображення
+                const imgData = canvas.toDataURL("image/png");
+                const link = document.createElement("a");
+                link.href = imgData;
+                link.download = "template_screenshot.png";
+                link.click();
+            });
+        })
+        .catch(err => {
+            alert("Error capturing the template site: " + err.message);
+        });
+}
+
+// Функція для створення PDF
+function captureAndDownloadPDF(url) {
+    fetch(url)
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+
+            // Створення PDF
+            const { jsPDF } = window.jspdf;
+            const docPdf = new jsPDF();
+
+            // Використовуємо html2canvas для створення знімка (скріншота) в PDF
+            html2canvas(doc.body).then(canvas => {
+                const imgData = canvas.toDataURL("image/png");
+                docPdf.addImage(imgData, "PNG", 10, 10, 180, 160);  // Вказуємо розмір і координати
+                docPdf.save("template.pdf");
+            });
+        })
+        .catch(err => {
+            alert("Error generating PDF from template site: " + err.message);
+        });
+}
+
 let templateData = [];
 
 // Слухач зміни вибору
