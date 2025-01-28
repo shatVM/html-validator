@@ -2,8 +2,7 @@ const templateSites = [
     "https://shatvm.github.io/html-validator/template-sites/00/index.html",
     "https://shatvm.github.io/html-validator/template-sites/01/index.html",
     "https://shatvm.github.io/html-validator/template-sites/02/index.html",
-    "https://shatvm.github.io/html-validator/template-sites/HTML%20Tutorial",
-    "https://sergey24aliceum.github.io/Html-academy/"
+    "https://shatvm.github.io/04_FC_Polissya_A/"
 ];
 
 // Контейнер для випадаючого списку
